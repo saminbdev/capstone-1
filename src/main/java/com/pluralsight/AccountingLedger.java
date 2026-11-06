@@ -1,10 +1,11 @@
 package com.pluralsight;
+import java.util.List;
+import java.util.ArrayList;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Scanner;
 
 public class AccountingLedger {
+    private static List<String> transactions = new ArrayList<>();
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
@@ -28,7 +29,7 @@ public class AccountingLedger {
                     addDeposit(scanner);
                 }
                 case "P" -> {
-                    System.out.println("Make Payment - Coming Soon");
+                    makePayment(scanner);
                 }
                 case "L" -> {
                     System.out.println("Make Ledger - Coming Soon");
@@ -47,22 +48,48 @@ public class AccountingLedger {
     }
 
     public static void addDeposit(Scanner scanner) {
-        System.out.println("Enter the date (YYYY-MM-DD): ");
+        System.out.print("Enter the date (YYYY-MM-DD): ");
         String date = scanner.nextLine();
 
-        System.out.println("Enter the time (HH-MM): ");
+        System.out.print("Enter the time (HH-MM): ");
         String time = scanner.nextLine();
 
-        System.out.println("Enter the description: ");
+        System.out.print("Enter the description: ");
         String description = scanner.nextLine();
 
-        System.out.println("Enter the vendor: ");
+        System.out.print("Enter the vendor: ");
         String vendor = scanner.nextLine();
 
-        System.out.println("Enter the amount: ");
+        System.out.print("Enter the amount: ");
         String amountStr = scanner.nextLine();
         double amount = Double.parseDouble(amountStr);
 
-        System.out.println("Deposit recorded!");
+        System.out.print("Deposit recorded!");
+        String line = date + "," + time + "," + description + "," + vendor + "," + amount;
+        transactions.add(line);
     }
+
+public static void makePayment(Scanner scanner) {
+    System.out.print("Enter the date (YYYY-MM-DD): ");
+    String date = scanner.nextLine();
+
+    System.out.print("Enter the time (HH-MM): ");
+    String time = scanner.nextLine();
+
+    System.out.print("Enter the description: ");
+    String description = scanner.nextLine();
+
+    System.out.print("Enter the vendor: ");
+    String vendor = scanner.nextLine();
+
+    System.out.print("Enter the amount: ");
+    String amountStr = scanner.nextLine();
+    double amount = Double.parseDouble(amountStr) * -1;
+
+    System.out.print("Payment recorded!");
+    String line = date + "," + time + "," + description + "," + vendor + "," + amount;
+    transactions.add(line);
 }
+}
+
+
