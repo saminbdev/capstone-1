@@ -61,13 +61,6 @@ public LocalDate getItemDate() {
     public void setItemAmount(double itemAmount) {
         this.itemAmount = itemAmount;
     }
-    @Override
-    public String toString() {
-    return  itemDate + " " + itemTime + " | " + itemDescription + " | " + itemVendor + " | " + itemAmount;
-    }
-
-
-
 
 }
 
