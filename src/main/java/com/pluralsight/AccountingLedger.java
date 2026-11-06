@@ -1,13 +1,20 @@
 package com.pluralsight;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class AccountingLedger {
-    private static List<String> transactions = new ArrayList<>();
+    private static final List<String> transactions = new ArrayList<>();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+
+        loadTransactions();
 
 
         String menuList = """
@@ -23,15 +30,11 @@ public class AccountingLedger {
         boolean homeSet = true;
         while (homeSet) {
             System.out.println(menuList);
-            String userInput = scanner.nextLine().toUpperCase();
+            String userInput = scanner.nextLine().trim().toUpperCase();
 
             switch (userInput) {
-                case "D" -> {
-                    addDeposit(scanner);
-                }
-                case "P" -> {
-                    makePayment(scanner);
-                }
+                case "D" -> addDeposit(scanner);
+                case "P" -> makePayment(scanner);
                 case "L" -> {
                     System.out.println("Ledger");
                     if (transactions.isEmpty()) {
@@ -47,10 +50,7 @@ public class AccountingLedger {
                     System.out.println("Thank you and come again!");
                     homeSet = false;
                 }
-                default -> {
-                    System.out.println("Sorry the letter you typed is not found in the system.Please try again!");
-
-                }
+                default -> System.out.println("Sorry the letter you typed is not found in the system.Please try again!");
 
             }
         }
@@ -60,7 +60,7 @@ public class AccountingLedger {
         System.out.print("Enter the date (YYYY-MM-DD): ");
         String date = scanner.nextLine();
 
-        System.out.print("Enter the time (HH-MM): ");
+        System.out.print("Enter the time (HH:MM:SS): ");
         String time = scanner.nextLine();
 
         System.out.print("Enter the description: ");
@@ -74,15 +74,17 @@ public class AccountingLedger {
         double amount = Double.parseDouble(amountStr);
 
         System.out.println("Deposit recorded!");
-        String line = date + "|" + time + "|" + description + "|" + vendor + "|" + amount;
+        String formattedAmount = String.format("%.2f",amount);
+        String line = date + "|" + time + "|" + description + "|" + vendor + "|" + formattedAmount;
         transactions.add(line);
+        saveToFile(line);
     }
 
     public static void makePayment(Scanner scanner) {
         System.out.print("Enter the date (YYYY-MM-DD): ");
         String date = scanner.nextLine();
 
-        System.out.print("Enter the time (HH-MM:SS): ");
+        System.out.print("Enter the time (HH:MM:SS): ");
         String time = scanner.nextLine();
 
         System.out.print("Enter the description: ");
@@ -95,9 +97,42 @@ public class AccountingLedger {
         String amountStr = scanner.nextLine();
         double amount = Double.parseDouble(amountStr) * -1;
 
-        System.out.println("Payment recorded!");
-        String line = date + "|" + time + "|" + description + "|" + vendor + "|" + amount;
+        String formattedAmount = String.format("%.2f", amount);
+        String line = date + "|" + time + "|" + description + "|" + vendor + "|" + formattedAmount;
         transactions.add(line);
+        saveToFile(line);
+    }
+
+    public static void loadTransactions() {
+        java.io.File file = new java.io.File("transactions.csv");
+
+        if (!file.exists()) {
+            return;
+        }
+
+        try {
+            FileReader fileReader = new FileReader("transactions.csv");
+            BufferedReader bufReader = new BufferedReader(fileReader);
+
+            String line;
+            while ((line = bufReader.readLine()) != null) {
+                transactions.add(line);
+            }
+            bufReader.close();
+        } catch (IOException e) {
+            System.out.println("Error loading transactions: " + e.getMessage());
+        }
+    }
+    public static void saveToFile(String line) {
+        try {
+
+            BufferedWriter writer = new BufferedWriter(new FileWriter("transactions.csv", true));
+            writer.write(line);
+            writer.newLine();
+            writer.close();
+        } catch (IOException e) {
+            System.out.println("Error saving transaction: " + e.getMessage());
+        }
     }
 }
 
