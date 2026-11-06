@@ -25,7 +25,7 @@ public class AccountingLedger {
 
             switch (userInput) {
                 case "D" -> {
-                    System.out.println("Make Deposit - Coming Soon");
+                    addDeposit(scanner);
                 }
                 case "P" -> {
                     System.out.println("Make Payment - Coming Soon");
@@ -37,8 +37,32 @@ public class AccountingLedger {
                     System.out.println("Thank you and come again!");
                     homeSet = false;
                 }
-            }
+                default -> {
+                    System.out.println("Sorry the letter you typed is not found in the system.Please try again!");
 
+                }
+
+            }
         }
+    }
+
+    public static void addDeposit(Scanner scanner) {
+        System.out.println("Enter the date (YYYY-MM-DD): ");
+        String date = scanner.nextLine();
+
+        System.out.println("Enter the time (HH-MM): ");
+        String time = scanner.nextLine();
+
+        System.out.println("Enter the description: ");
+        String description = scanner.nextLine();
+
+        System.out.println("Enter the vendor: ");
+        String vendor = scanner.nextLine();
+
+        System.out.println("Enter the amount: ");
+        String amountStr = scanner.nextLine();
+        double amount = Double.parseDouble(amountStr);
+
+        System.out.println("Deposit recorded!");
     }
 }
